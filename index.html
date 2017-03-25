@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Cat-O-Matic!</title>
+    <link rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel='stylesheet' href="styles.css" />
+    <script src="https://code.jquery.com/jquery-3.1.0.js"   integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="   crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://www.jimsproch.com/react/future/react.js"></script>
+    <script src="http://www.jimsproch.com/react/future/react-dom.js"></script>
+    <script src="http://www.jimsproch.com/react/babel-browser.js"></script>
+  </head>
+  <body>
+    <div id='placeholder'></div>
+
+    <script type='text/babel'>
+      var ActiveImage = React.createClass({
+        render: function() {
+          return <div className='activeImage'>
+            <div className='overlay'>
+              <div className='image'>
+                <img src={ this.props.image } />
+
+                <div className='actions'>
+                  <a href='#' onClick={ this.props.onClose }>Close</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      })
+
+      var ThumbnailImage = React.createClass({
+        render: function() {
+          return <div className='col-md-3'>
+            <a href='#' className='thumbnail' onClick={ this.props.onSelect }>
+              <img src={ this.props.image } />
+            </a>
+          </div>
+        }
+      })
+
+      var CatApp = React.createClass({
+        getInitialState: function() {
+          return {
+            images: [
+              "images/cat1.jpg",
+              "images/cat2.jpg",
+              "images/cat3.jpg",
+              "images/cat4.jpg",
+              "images/cat5.jpg",
+              "images/cat6.jpg",
+              "images/cat7.jpg",
+              "images/cat8.jpg",
+              "images/cat9.jpg",
+              "images/cat10.jpg"
+            ],
+            activeImage: null
+          }
+        },
+
+        render: function() {
+          var component = this;
+
+          return <div className='container'>
+            { this.state.activeImage !== null ?
+              <ActiveImage image={this.state.images[this.state.activeImage]}
+                           onClose={ this.deselectCat }/> :
+              null
+            }
+
+            <div className='thumbnails'>
+              { this.state.images.map(function(image, i) {
+                return <ThumbnailImage key={ i } image={ image }
+                    onSelect={ component.catSelected.bind(component, i) } />
+              })}
+            </div>
+          </div>;
+        },
+
+        catSelected: function(i) {
+          console.log("cat selected!", i);
+          this.setState({ activeImage: i });
+        },
+
+        deselectCat: function() {
+          this.setState({ activeImage: null });
+        }
+      })
+
+      ReactDOM.render(<CatApp />, document.getElementById("placeholder"));
+    </script>
+  </body>
+</html>
